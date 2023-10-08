@@ -32,8 +32,10 @@ async function GetLyrics(SongName) { // removed SongArtist for the API implement
 }
 
 async function Main(Interaction) {
+    await Interaction.deferReply(); // Hotfix to prevent application erroring for larger/unloaded song lyrics
+
     const SongName = Interaction.options.getString('song');
-    const LyricsResult = await GetLyrics(SongName)
+    const LyricsResult = await GetLyrics(SongName);
 
     let RichEmbeds = [];
 
@@ -43,7 +45,7 @@ async function Main(Interaction) {
             .setTitle(`בעיה`) // 
             .setDescription(`הייתה בעיה בפעולה.`)
 
-        RichEmbeds.push(RichEmbed)
+        RichEmbeds.push(RichEmbed);
     } else {
         const SplitLyrics = splitStringByLength(LyricsResult.Lyrics, 1500) // Slice lyrics to allow for the full song to be sent back. Niche little perk :)
         let SplitIndex = 0;
@@ -55,14 +57,14 @@ async function Main(Interaction) {
                     .setTitle(`מילים לשיר: ${LyricsResult.SongName} על ידי ${LyricsResult.Artists}`)
                     .setDescription(`\`\`\`${IdentifiedLyric}\`\`\``) // Implementing the slice
 
-                RichEmbeds.push(RichEmbed)
+                RichEmbeds.push(RichEmbed);
                 SplitIndex += 1
             } else {
                 const RichEmbed = new EmbedBuilder()
                     .setColor('#5865F2')
                     .setDescription(`\`\`\`${IdentifiedLyric}\`\`\``) // Implementing the slice
 
-                RichEmbeds.push(RichEmbed)
+                RichEmbeds.push(RichEmbed);
                 SplitIndex += 1
             }
         }

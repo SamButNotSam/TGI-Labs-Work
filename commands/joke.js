@@ -21,6 +21,7 @@ async function GetJoke() { // originally was going to use sv443-joke-api but it'
 }
 
 async function Main(Interaction) {
+    await Interaction.deferReply(); // Hotfix to prevent application erroring for larger/unloaded jokes
     const JokeButton = new ButtonBuilder()
         .setCustomId('joke')
         .setLabel(`כן!`)
