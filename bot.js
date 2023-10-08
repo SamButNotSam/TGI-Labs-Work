@@ -31,7 +31,10 @@ async function CreateCommands() {
         const required_command = require(command_loc);
 
         if ('runner' in required_command && 'data' in required_command) {
-            commands_set.push(required_command.data.toJSON());
+            commands_set.push({
+                cmdData: required_command.data.toJSON(),
+                cmdFunc: required_command.runner
+            });
         } else {
             console.log(`Dead command file: ${loaded_command}. This command will not be loaded`);
         }
@@ -48,7 +51,7 @@ async function RegisterBot() {
     
             await rest.put(
                 Routes.applicationCommands(process.env.BOTID),
-                { body: commands_set },
+                { body: commands_set.cmdData },
             );
     
         } catch (err) {
@@ -60,7 +63,7 @@ async function RegisterBot() {
 async function HandleInteraction(Interaction) {
     if (!Interaction.isChatInputCommand()) return;
     console.log(commands_set)
-    const fetched_command = commands_set.find((command) => command.name === Interaction.commandName);
+    const fetched_command = commands_set.find((command) => command.cmdData.name === Interaction.commandName);
 
     if (!fetched_command) {
         return await Interaction.reply({
@@ -70,7 +73,7 @@ async function HandleInteraction(Interaction) {
     };
 
     try {
-        await fetched_command.runner(Interaction);
+        await fetched_command.cmdFunc(Interaction);
     } catch (err) {
         console.log(`Unexpected error caught: ${err}`);
         if (Interaction.replied || Interaction.deferred) {
