@@ -4,7 +4,7 @@
   "description": "Bot for TGI Labs work appraisal",
   "main": "bot.js",
   "scripts": {
-    "run": "node bot.js",
+    "bot": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
