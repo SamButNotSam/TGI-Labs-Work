@@ -21,8 +21,6 @@ async function GetLyrics(SongName) { // removed SongArtist for the API implement
         const FirstResult = AllResults[0]
         const ResultLyrics = await FirstResult.lyrics()
 
-        console.log(FirstResult)
-
         return {
             Lyrics: ResultLyrics,
             Artists: FirstResult.artist.name, // artist name and song name because the result may not be what was searched
@@ -35,8 +33,7 @@ async function GetLyrics(SongName) { // removed SongArtist for the API implement
 
 async function Main(Interaction) {
     const SongName = Interaction.options.getString('song');
-    const SongArtist = Interaction.options.getString('artist');
-    const LyricsResult = await GetLyrics(SongName, SongArtist)
+    const LyricsResult = await GetLyrics(SongName)
 
     let RichEmbeds = [];
 
