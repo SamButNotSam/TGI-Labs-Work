@@ -70,7 +70,7 @@ async function Main(Interaction) {
         }
     }
 
-    await Interaction.reply({
+    await Interaction.editReply({
         embeds: RichEmbeds,
         ephemeral: true
     })

@@ -21,7 +21,6 @@ async function GetJoke() { // originally was going to use sv443-joke-api but it'
 }
 
 async function Main(Interaction) {
-    await Interaction.deferReply(); // Hotfix to prevent application erroring for larger/unloaded jokes
     const JokeButton = new ButtonBuilder()
         .setCustomId('joke')
         .setLabel(`כן!`)
@@ -41,10 +40,11 @@ async function Main(Interaction) {
         const JokeButtonPressed = await FirstReply.awaitMessageComponent({ filter: InteractionUIDFilter, time: 60000 });
 
         if (JokeButtonPressed.customId === 'joke') {
+            await JokeButtonPressed.deferReply(); // Hotfix to prevent application erroring for larger/unloaded jokes
             const JokeData = await GetJoke();
 
             if (JokeData === false) {
-                await Interaction.editReply({
+                await JokeButtonPressed.editReply({
                     content: `הייתה בעיה בפעולה.`,
                     components: [],
                     ephermal: true
