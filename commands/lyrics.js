@@ -48,8 +48,6 @@ async function Main(Interaction) {
         const SplitLyrics = splitStringByLength(LyricsResult.Lyrics, 1500) // Slice lyrics to allow for the full song to be sent back. Niche little perk :)
         let SplitIndex = 0;
 
-        console.log(SplitLyrics)
-
         for (const IdentifiedLyric of SplitLyrics) {
             if (SplitIndex === 0) {
                 const RichEmbed = new EmbedBuilder()
