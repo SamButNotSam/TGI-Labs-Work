@@ -1,0 +1,22 @@
+{
+  "name": "tgi-labs-bot",
+  "version": "69.42.0",
+  "description": "Bot for TGI Labs work appraisal",
+  "main": "bot.js",
+  "scripts": {
+    "run": "node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/SamButNotSam/tgilabsbot"
+  },
+  "author": "@realsamtheman",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/core": "^1.0.1",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security"
+  }
+}
