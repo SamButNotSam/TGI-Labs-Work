@@ -32,7 +32,9 @@ async function GetLyrics(SongName) { // removed SongArtist for the API implement
 }
 
 async function Main(Interaction) {
-    await Interaction.deferReply(); // Hotfix to prevent application erroring for larger/unloaded song lyrics
+    await Interaction.deferReply({
+        ephemeral: true
+    }); // Hotfix to prevent application erroring for larger/unloaded song lyrics
 
     const SongName = Interaction.options.getString('song');
     const LyricsResult = await GetLyrics(SongName);

@@ -27,6 +27,8 @@ const OperationHandles = {
 }
 
 async function Main(Interaction) {
+    await Interaction.deferReply({ephemeral:true}); // This is a VERY rare case (slow host) but I will still implement for 100% foolproof handling
+
     const FirstDigit = Interaction.options.getInteger('first_digit');
     const SecondDigit = Interaction.options.getInteger('second_digit');
     const Operation = Interaction.options.getString('operation');
@@ -36,7 +38,7 @@ async function Main(Interaction) {
         .setTitle('מחשבון')
         .setDescription(`התוצאה לחישוב \`${FirstDigit} ${Operation} ${SecondDigit}\` היא \`${MathResult}\``)
 
-    await Interaction.reply({
+    await Interaction.editReply({
         embeds: [RichResult],
         ephemeral: true
     })

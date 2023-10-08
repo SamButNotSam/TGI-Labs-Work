@@ -40,17 +40,20 @@ async function Main(Interaction) {
         const JokeButtonPressed = await FirstReply.awaitMessageComponent({ filter: InteractionUIDFilter, time: 60000 });
 
         if (JokeButtonPressed.customId === 'joke') {
-            await JokeButtonPressed.deferReply(); // Hotfix to prevent application erroring for larger/unloaded jokes
+            await JokeButtonPressed.deferReply({
+                ephemeral: true
+            }); // Hotfix to prevent application erroring for larger/unloaded jokes
+            
             const JokeData = await GetJoke();
 
             if (JokeData === false) {
-                await JokeButtonPressed.editReply({
+                await Interaction.editReply({
                     content: `הייתה בעיה בפעולה.`,
                     components: [],
                     ephermal: true
                 });
             } else {
-                await JokeButtonPressed.update({ // Update instead of reply because I want to remove the clutter of the button
+                await JokeButtonPressed.editReply({
                     content: `${JokeData.Setup} \n||${JokeData.Delivery}||`, // Spoiler for delivery, plaintext for setup!
                     components: [],
                     ephemeral: true
