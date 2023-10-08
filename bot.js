@@ -64,7 +64,6 @@ async function RegisterBot() {
 
 async function HandleInteraction(Interaction) {
     if (!Interaction.isChatInputCommand()) return;
-    console.log(commands_set)
     const fetched_command = commands_set.find((command) => command.cmdData.name === Interaction.commandName);
 
     if (!fetched_command) {
