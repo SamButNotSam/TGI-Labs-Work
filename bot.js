@@ -4,6 +4,8 @@
     Project Date : 9/26/2023
     Project Author : @realsamtheman / businessforsamyt@gmail.com
 
+    Notes : Every external source that I used should be cited, if not let me know!
+
 */
 
 // Packages
@@ -11,7 +13,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 const filesystem = require("fs");
 const { Client, Events, GatewayIntentBits, REST, Routes } = require('discord.js');
-const { command } = require("./commands/joke");
 
 // Static vars
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });

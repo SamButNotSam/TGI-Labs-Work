@@ -3,14 +3,30 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Genius = require("genius-lyrics");
 const Client = new Genius.Client(process.env.GENIUSAUTH);
 
-async function GetLyrics(SongName, SongArtist) { // https://github.com/angeloanan/lyrics-finder - authentication method
+function splitStringByLength(string, length) { // bard.google.com - this func is AI generated because I was failing to make the logic
+    const splitStrings = [];
+    let startIndex = 0;
+    while (startIndex < string.length) {
+        const endIndex = Math.min(startIndex + length, string.length);
+        splitStrings.push(string.substring(startIndex, endIndex));
+        startIndex = endIndex;
+    }
+
+    return splitStrings;
+}
+
+async function GetLyrics(SongName) { // removed SongArtist for the API implementation, was not needed however I left it in the bot for replication purposes
     try {
-        const AllResults = await Client.songs.search(`${SongName} ${SongArtist}`)
+        const AllResults = await Client.songs.search(`${SongName}`)
         const FirstResult = AllResults[0]
         const ResultLyrics = await FirstResult.lyrics()
-        
+
+        console.log(FirstResult)
+
         return {
-            Lyrics: ResultLyrics
+            Lyrics: ResultLyrics,
+            Artists: FirstResult.artist.name, // artist name and song name because the result may not be what was searched
+            SongName: FirstResult.title
         }
     } catch (err) {
         return false;
@@ -22,22 +38,44 @@ async function Main(Interaction) {
     const SongArtist = Interaction.options.getString('artist');
     const LyricsResult = await GetLyrics(SongName, SongArtist)
 
-    let RichResult;
+    let RichEmbeds = [];
 
     if (LyricsResult === false) {
-        RichResult = new EmbedBuilder()
+        const RichEmbed = new EmbedBuilder()
             .setColor('#5865F2')
-            .setTitle(`מילים לשיר: ${SongName} על ידי ${SongArtist}`)
+            .setTitle(`בעיה`) // 
             .setDescription(`הייתה בעיה בפעולה.`)
+
+        RichEmbeds.push(RichEmbed)
     } else {
-        RichResult = new EmbedBuilder()
-            .setColor('#5865F2')
-            .setTitle(`מילים לשיר: ${SongName} על ידי ${SongArtist}`)
-            .setDescription(`\`\`\`${LyricsResult.Lyrics}\`\`\``)
+        const SplitLyrics = splitStringByLength(LyricsResult.Lyrics, 1500) // Slice lyrics to allow for the full song to be sent back. Niche little perk :)
+        let SplitIndex = 0;
+
+        console.log(SplitLyrics)
+
+        for (const IdentifiedLyric of SplitLyrics) {
+            if (SplitIndex === 0) {
+                const RichEmbed = new EmbedBuilder()
+                    .setColor('#5865F2')
+                    .setTitle(`מילים לשיר: ${LyricsResult.SongName} על ידי ${LyricsResult.Artists}`)
+                    .setDescription(`\`\`\`${IdentifiedLyric}\`\`\``) // Implementing the slice
+
+                RichEmbeds.push(RichEmbed)
+                SplitIndex += 1
+            } else {
+                const RichEmbed = new EmbedBuilder()
+                    .setColor('#5865F2')
+                    .setDescription(`\`\`\`${IdentifiedLyric}\`\`\``) // Implementing the slice
+
+                RichEmbeds.push(RichEmbed)
+                SplitIndex += 1
+            }
+        }
     }
 
     await Interaction.reply({
-        embeds: [RichResult]
+        embeds: RichEmbeds,
+        ephemeral: true
     })
 }
 

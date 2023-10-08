@@ -37,7 +37,8 @@ async function Main(Interaction) {
         .setDescription(`התוצאה לחישוב \`${FirstDigit} ${Operation} ${SecondDigit}\` היא \`${MathResult}\``)
 
     await Interaction.reply({
-        embeds: [RichResult]
+        embeds: [RichResult],
+        ephemeral: true
     })
 }
 
