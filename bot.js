@@ -11,12 +11,13 @@ const dotenv = require("dotenv");
 const path = require("path");
 const filesystem = require("fs");
 const { Client, Events, GatewayIntentBits, REST, Routes } = require('discord.js');
-const { command } = require("./commands/test");
+const { command } = require("./commands/joke");
 
 // Static vars
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const commands = path.join(__dirname, 'commands');
 const commands_loaded = filesystem.readdirSync(commands).filter(command => command.endsWith('.js'));
+const commands_set_stripped = []; // Just for registering commands
 const commands_set = [];
 const rest = new REST()
 
@@ -31,6 +32,7 @@ async function CreateCommands() {
         const required_command = require(command_loc);
 
         if ('runner' in required_command && 'data' in required_command) {
+            commands_set_stripped.push(required_command.data.toJSON());
             commands_set.push({
                 cmdData: required_command.data.toJSON(),
                 cmdFunc: required_command.runner
@@ -51,7 +53,7 @@ async function RegisterBot() {
     
             await rest.put(
                 Routes.applicationCommands(process.env.BOTID),
-                { body: commands_set.cmdData },
+                { body: commands_set_stripped },
             );
     
         } catch (err) {
