@@ -23,14 +23,14 @@ async function GetJoke() { // originally was going to use sv443-joke-api but it'
 async function Main(Interaction) {
     const JokeButton = new ButtonBuilder()
         .setCustomId('joke')
-        .setLabel('Get Joke')
+        .setLabel(`כן!`)
         .setStyle(ButtonStyle.Primary)
 
     const ActionRow = new ActionRowBuilder()
         .addComponents(JokeButton)
 
     const FirstReply = await Interaction.reply({
-        content: "Do you want to get a random joke?",
+        content: `האם את/ה רוצה לשמוע בדיחה רנדומלי?`,
         components: [ActionRow],
         ephemeral: true
     });
@@ -44,7 +44,7 @@ async function Main(Interaction) {
 
             if (JokeData === false) {
                 await Interaction.editReply({
-                    content: `The command errored.`,
+                    content: `הייתה בעיה בפעולה.`,
                     components: [],
                     ephermal: true
                 });
@@ -58,7 +58,7 @@ async function Main(Interaction) {
         }
     } catch (error) {
         await Interaction.editReply({
-            content: `No joke since you didn't respond in time.`,
+            content: `לא ענית בזמן.`,
             components: [],
             ephermal: true
         });
@@ -69,5 +69,5 @@ module.exports = {
     runner: Main,
     data: new SlashCommandBuilder()
         .setName('joke')
-        .setDescription('Get a random joke from the internet!'),
+        .setDescription(`תקבל בדיחה רנדומלי באנגלית מהאינטרנט!`),
 }
